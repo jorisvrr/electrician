@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────────────────
+   DESIGN TOKENS
+
+   De twee merkkleuren (--brand / --accent) worden door layout.tsx uit
+   siteConfig.theme op <html> gezet en overschrijven de waarden hieronder.
+
+   Richting: precies, technisch, nuchter. Grafiet met signaalamber, haarlijnen
+   in plaats van schaduwen, en nul radius — een installatietekening, geen
+   softwareproduct. Amber (en niet blauw) omdat blauw als SaaS leest en amber
+   in de elektrotechniek "let op" betekent.
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-brand: #1d232a;
+  --color-brand-dark: #141920;
+  --color-accent: #ffb300;
+  --color-accent-dark: #e09e00;
+
+  /* Tekst óp amber is donker, nooit wit: wit op amber haalt geen contrast. */
+  --color-accent-ink: #1d232a;
+
+  --color-paper: #ffffff;
+  --color-shell: #f2f4f6;
+  --color-shell-dark: #e6eaee;
+  --color-line: #dce1e6;
+  --color-line-strong: #c3ccd3;
+  --color-ink: #11161b;
+  --color-muted: #5a666f;
+  --color-whatsapp: #1faa53;
+  --color-whatsapp-dark: #198f45;
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Hoogte van de mobiele actiebalk — gebruikt om content vrij te houden */
+  --mobile-bar-h: 4.75rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Sticky header mag ankers niet afsnijden */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* De mobiele actiebalk mag nooit de laatste content afdekken */
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: calc(var(--mobile-bar-h) + env(safe-area-inset-bottom));
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  h1 {
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Zichtbare focus voor toetsenbord- en screenreadergebruikers */
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+}
+
+@layer components {
+  /* ── Knoppen ────────────────────────────────────────────────────────────
+     De hiërarchie van deze niche, van luid naar zacht:
+       .btn-call     amber  — bellen, de belangrijkste actie bij een storing
+       .btn-primary  grafiet — offerte aanvragen
+       .btn-outline  haarlijn — alles daaronder
+       .btn-whatsapp groen  — bewust de derde optie
+     Minimaal 48px hoog: comfortabel op mobiel. Geen radius: strak en
+     technisch, en meteen te onderscheiden van de hovenier-demo. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    letter-spacing: -0.01em;
+    transition:
+      background-color 0.16s ease,
+      color 0.16s ease,
+      box-shadow 0.16s ease,
+      transform 0.16s ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-call {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  .btn-call:hover {
+    background-color: var(--color-accent-dark);
+  }
+
+  .btn-primary {
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-brand-dark);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: var(--color-brand);
+    box-shadow: inset 0 0 0 1.5px var(--color-line-strong);
+  }
+
+  .btn-outline:hover {
+    box-shadow: inset 0 0 0 1.5px var(--color-brand);
+  }
+
+  /* Op een donkere ondergrond */
+  .btn-outline-light {
+    background-color: transparent;
+    color: #fff;
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.3);
+  }
+
+  .btn-outline-light:hover {
+    background-color: rgb(255 255 255 / 0.08);
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.55);
+  }
+
+  /* WhatsApp houdt zijn eigen herkenbare groen */
+  .btn-whatsapp {
+    background-color: var(--color-whatsapp);
+    color: #fff;
+  }
+
+  .btn-whatsapp:hover {
+    background-color: var(--color-whatsapp-dark);
+  }
+
+  .section {
+    padding-block: 3.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .section {
+      padding-block: 5.5rem;
+    }
+  }
+
+  .container-x {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* ── Technisch label ────────────────────────────────────────────────────
+     Mono, uppercase, met een amber streepje ervoor. Dit is het handschrift
+     van deze site: het komt terug boven elke sectiekop, bij elk spec-item en
+     in de voortgangsbalk van het formulier. */
+  .label-tech {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .label-tech::before {
+    content: "";
+    width: 1.35rem;
+    height: 2px;
+    background-color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  /* Variant zonder streepje, voor in een krappe ruimte */
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ── Kaart ──────────────────────────────────────────────────────────────
+     Haarlijn in plaats van schaduw. De accentvariant krijgt een amber
+     bovenrand: dat markeert de route die we aanraden. */
+  .card {
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-line);
+  }
+
+  .card-accent {
+    border-top: 3px solid var(--color-accent);
+  }
+
+  /* Blauwdruk-raster voor donkere vlakken. Geen afbeelding, alleen twee
+     gradients — kost niets en schaalt oneindig. */
+  .grid-blueprint {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+  }
+}
+
+@layer utilities {
+  /* ── Subtiele scroll-reveal, zonder JavaScript ───────────────────────────
+     Scroll-driven animations waar de browser ze ondersteunt; elders simpelweg
+     geen animatie. Bewust alleen `transform` en géén `opacity`: content kan
+     daardoor nooit onzichtbaar blijven hangen — niet bij printen, niet in
+     screenshots, niet in een browser die de property half ondersteunt. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 90%;
+      }
+    }
+  }
+
+  @keyframes reveal-in {
+    from {
+      transform: translateY(14px);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  /* Cijfers uitlijnen in tabellen en specs */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Verbergt tekst visueel maar houdt 'm leesbaar voor screenreaders */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
